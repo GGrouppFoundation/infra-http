@@ -46,10 +46,10 @@ jobs:
     - name: Restore Http.SocketsHandlerProvider
       run: dotnet restore ./src/*/*/Http.SocketsHandlerProvider.csproj
 
-    - name: Build Dataverse.Api
+    - name: Build Http.SocketsHandlerProvider
       run: dotnet build ./src/*/*/Http.SocketsHandlerProvider.csproj --no-restore
 
-    - name: Pack Dataverse.Api
+    - name: Pack Http.SocketsHandlerProvider
       run: dotnet pack ./src/*/*/Http.SocketsHandlerProvider.csproj --no-restore -o ~/nuget
       
     # Http.HttpClient.Dependency
@@ -60,7 +60,7 @@ jobs:
     - name: Build Http.HttpClient.Dependency
       run: dotnet build ./src/*/*/Http.HttpClient.Dependency.csproj --no-restore
 
-    - name: Pack Dataverse.Api
+    - name: HttpClient.Dependency
       run: dotnet pack ./src/*/*/Http.HttpClient.Dependency.csproj --no-restore -o ~/nuget
       
     # Push
