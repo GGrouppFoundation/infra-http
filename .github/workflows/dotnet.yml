@@ -1,0 +1,70 @@
+name: .NET
+
+on:
+  push:
+    branches: [ main ]
+    
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 5.0.x
+        
+     # Add NuGet Sources
+
+    - name: Create Local NuGet Directory
+      run: mkdir ~/nuget
+
+    - name: Add Local Nuget Source
+      run: dotnet nuget add source ~/nuget
+
+    - name: Add GGroupp NuGet Source
+      run: dotnet nuget add source ${{ secrets.GGROUPP_NUGET_SOURCE_URL }} -n ggroupp -u ${{ secrets.GGROUPP_NUGET_SOURCE_USER_NAME }} -p ${{ secrets.GGROUPP_NUGET_SOURCE_USER_PASSWORD }} --store-password-in-clear-text
+
+    # Http.SocketsHandlerProvider.Abstractions
+    
+    - name: Restore Http.SocketsHandlerProvider.Abstractions
+      run: dotnet restore ./src/*/Http.SocketsHandlerProvider.Abstractions.csproj
+
+    - name: Build Http.SocketsHandlerProvider.Abstractions
+      run: dotnet build ./src/*/Http.SocketsHandlerProvider.Abstractions.csproj --no-restore
+
+    - name: Pack Http.SocketsHandlerProvider.Abstractions
+      run: dotnet pack ./src/*/Http.SocketsHandlerProvider.Abstractions.csproj --no-restore -o ~/nuget
+      
+    # Http.SocketsHandlerProvider
+
+    - name: Restore Http.SocketsHandlerProvider
+      run: dotnet restore ./src/*/Http.SocketsHandlerProvider.csproj
+
+    - name: Build Dataverse.Api
+      run: dotnet build ./src/*/Http.SocketsHandlerProvider.csproj --no-restore
+
+    - name: Pack Dataverse.Api
+      run: dotnet pack ./src/*/Http.SocketsHandlerProvider.csproj --no-restore -o ~/nuget
+      
+    # Http.HttpClient.Dependency
+
+    - name: Restore Http.HttpClient.Dependency
+      run: dotnet restore ./src/*/Http.HttpClient.Dependency.csproj
+
+    - name: Build Http.HttpClient.Dependency
+      run: dotnet build ./src/*/Http.HttpClient.Dependency.csproj --no-restore
+
+    - name: Pack Dataverse.Api
+      run: dotnet pack ./src/*/Http.HttpClient.Dependency.csproj --no-restore -o ~/nuget
+      
+    # Push
+      
+    - name: Push Packages
+      if: ${{ github.event_name == 'push' }}
+      run: dotnet nuget push "../../../nuget/*.nupkg" -s ${{ secrets.GGROUPP_NUGET_SOURCE_URL }} -k ${{ secrets.GGROUPP_NUGET_SOURCE_USER_PASSWORD }} --skip-duplicate
