@@ -33,35 +33,35 @@ jobs:
     # Http.SocketsHandlerProvider.Abstractions
     
     - name: Restore Http.SocketsHandlerProvider.Abstractions
-      run: dotnet restore ./src/*/Http.SocketsHandlerProvider.Abstractions.csproj
+      run: dotnet restore ./src/*/*/Http.SocketsHandlerProvider.Abstractions.csproj
 
     - name: Build Http.SocketsHandlerProvider.Abstractions
-      run: dotnet build ./src/*/Http.SocketsHandlerProvider.Abstractions.csproj --no-restore
+      run: dotnet build ./src/*/*/Http.SocketsHandlerProvider.Abstractions.csproj --no-restore
 
     - name: Pack Http.SocketsHandlerProvider.Abstractions
-      run: dotnet pack ./src/*/Http.SocketsHandlerProvider.Abstractions.csproj --no-restore -o ~/nuget
+      run: dotnet pack ./src/*/*/Http.SocketsHandlerProvider.Abstractions.csproj --no-restore -o ~/nuget
       
     # Http.SocketsHandlerProvider
 
     - name: Restore Http.SocketsHandlerProvider
-      run: dotnet restore ./src/*/Http.SocketsHandlerProvider.csproj
+      run: dotnet restore ./src/*/*/Http.SocketsHandlerProvider.csproj
 
     - name: Build Dataverse.Api
-      run: dotnet build ./src/*/Http.SocketsHandlerProvider.csproj --no-restore
+      run: dotnet build ./src/*/*/Http.SocketsHandlerProvider.csproj --no-restore
 
     - name: Pack Dataverse.Api
-      run: dotnet pack ./src/*/Http.SocketsHandlerProvider.csproj --no-restore -o ~/nuget
+      run: dotnet pack ./src/*/*/Http.SocketsHandlerProvider.csproj --no-restore -o ~/nuget
       
     # Http.HttpClient.Dependency
 
     - name: Restore Http.HttpClient.Dependency
-      run: dotnet restore ./src/*/Http.HttpClient.Dependency.csproj
+      run: dotnet restore ./src/*/*/Http.HttpClient.Dependency.csproj
 
     - name: Build Http.HttpClient.Dependency
-      run: dotnet build ./src/*/Http.HttpClient.Dependency.csproj --no-restore
+      run: dotnet build ./src/*/*/Http.HttpClient.Dependency.csproj --no-restore
 
     - name: Pack Dataverse.Api
-      run: dotnet pack ./src/*/Http.HttpClient.Dependency.csproj --no-restore -o ~/nuget
+      run: dotnet pack ./src/*/*/Http.HttpClient.Dependency.csproj --no-restore -o ~/nuget
       
     # Push
       
