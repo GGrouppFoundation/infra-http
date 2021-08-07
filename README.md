@@ -1,1 +1,2 @@
-# ggroupp-infra-http
+# infra-http
+Infrastructure components to work with HTTP
