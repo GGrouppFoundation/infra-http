@@ -1,8 +1,5 @@
-#nullable enable
+namespace GGroupp.Infra;
 
-namespace GGroupp.Infra
+public static partial class PrimaryHandler
 {
-    public static partial class PrimaryHandler
-    {
-    }
 }

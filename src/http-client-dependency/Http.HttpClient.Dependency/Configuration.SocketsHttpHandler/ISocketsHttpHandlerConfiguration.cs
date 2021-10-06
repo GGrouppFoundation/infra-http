@@ -1,17 +1,14 @@
-#nullable enable
-
 using System;
 
-namespace GGroupp.Infra
+namespace GGroupp.Infra;
+
+public interface ISocketsHttpHandlerConfiguration
 {
-    public interface ISocketsHttpHandlerConfiguration
-    {
-        string Name { get; }
+    string Name { get; }
 
-        TimeSpan? PooledConnectionLifetime { get; }
+    TimeSpan? PooledConnectionLifetime { get; }
 
-        TimeSpan? PooledConnectionIdleTimeout { get; }
+    TimeSpan? PooledConnectionIdleTimeout { get; }
 
-        int? MaxConnectionsPerServer { get; }
-    }
+    int? MaxConnectionsPerServer { get; }
 }

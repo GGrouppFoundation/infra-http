@@ -1,12 +1,9 @@
-#nullable enable
-
 using System;
 using System.Net.Http;
 
-namespace GGroupp.Infra
+namespace GGroupp.Infra;
+
+public interface ISocketsHttpHandlerProvider
 {
-    public interface ISocketsHttpHandlerProvider
-    {
-        SocketsHttpHandler GetOrCreate(string name, Action<SocketsHttpHandler>? configure = null);
-    }
+    SocketsHttpHandler GetOrCreate(string name, Action<SocketsHttpHandler>? configure = null);
 }

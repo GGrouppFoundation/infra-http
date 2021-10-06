@@ -1,15 +1,12 @@
-#nullable enable
-
 using System;
 
-namespace GGroupp.Infra
+namespace GGroupp.Infra;
+
+public interface IHttpClientConfiguration
 {
-    public interface IHttpClientConfiguration
-    {
-        Uri? BaseAddress { get; }
+    Uri? BaseAddress { get; }
 
-        TimeSpan Timeout { get; }
+    TimeSpan Timeout { get; }
 
-        bool IsLoggingDisabled { get; }
-    }
+    bool IsLoggingDisabled { get; }
 }
