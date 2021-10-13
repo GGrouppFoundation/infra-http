@@ -13,8 +13,4 @@ public static partial class HttpConfigurationExtensions
     private static TimeSpan? ParseTimeSpan(string? value)
         =>
         string.IsNullOrEmpty(value) ? null : TimeSpan.Parse(value);
-
-    private static bool? ParseBool(string? value)
-        =>
-        string.IsNullOrEmpty(value) ? null : bool.Parse(value);
 }
