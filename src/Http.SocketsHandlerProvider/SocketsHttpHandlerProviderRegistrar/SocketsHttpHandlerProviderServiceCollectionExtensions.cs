@@ -10,7 +10,7 @@ namespace Microsoft.Extensions.DependencyInjection
             InternalAddSocketsHttpHandlerProviderAsSingleton(
                 services ?? throw new ArgumentNullException(nameof(services)));
 
-        internal static IServiceCollection InternalAddSocketsHttpHandlerProviderAsSingleton(IServiceCollection services)
+        internal static IServiceCollection InternalAddSocketsHttpHandlerProviderAsSingleton(this IServiceCollection services)
             =>
             services.AddSingleton<ISocketsHttpHandlerProvider, DefaultSocketsHttpHandlerProvider>();
     }
