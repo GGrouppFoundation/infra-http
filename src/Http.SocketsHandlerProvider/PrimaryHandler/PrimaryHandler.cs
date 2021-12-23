@@ -21,11 +21,10 @@ public static partial class PrimaryHandler
             sp => sp.GetService<ISocketsHttpHandlerProvider>() ?? defaultSocketsHttpHandlerProvider.Value)
         .With(
             configurationResolver)
-        .Pipe(
-            InnerUseSocketsHttpHandler);
+        .InnerUseSocketsHttpHandler();
 
     private static Dependency<SocketsHttpHandler> InnerUseSocketsHttpHandler(
-        Dependency<ISocketsHttpHandlerProvider, ISocketsHttpHandlerConfiguration> dependency)
+        this Dependency<ISocketsHttpHandlerProvider, ISocketsHttpHandlerConfiguration> dependency)
         =>
         dependency.Fold(
             (provider, config) => provider.GetOrCreate(config.Name, handler => InnerConfigureSocketsHandler(handler, config)));

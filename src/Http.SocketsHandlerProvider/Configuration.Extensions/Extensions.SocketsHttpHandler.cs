@@ -10,7 +10,7 @@ partial class HttpConfigurationExtensions
         new()
         {
             Name = GetVariableFromSection(sectionName, "Name"),
-            PooledConnectionLifetime = GetVariableFromSection(sectionName, "PooledConnectionLifetime").Pipe(ParseTimeSpan),
-            PooledConnectionIdleTimeout = GetVariableFromSection(sectionName, "PooledConnectionIdleTimeout").Pipe(ParseTimeSpan)
+            PooledConnectionLifetime = GetVariableFromSection(sectionName, "PooledConnectionLifetime").ParseTimeSpan(),
+            PooledConnectionIdleTimeout = GetVariableFromSection(sectionName, "PooledConnectionIdleTimeout").ParseTimeSpan()
         };
 }
