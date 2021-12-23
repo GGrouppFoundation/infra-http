@@ -10,7 +10,7 @@ public static partial class HttpConfigurationExtensions
             ? Environment.GetEnvironmentVariable(variableName)
             : Environment.GetEnvironmentVariable(sectionName + ":" + variableName);
 
-    private static TimeSpan? ParseTimeSpan(string? value)
+    private static TimeSpan? ParseTimeSpan(this string? value)
         =>
         string.IsNullOrEmpty(value) ? null : TimeSpan.Parse(value);
 }
