@@ -12,9 +12,23 @@ partial class LoggerDelegatingHandler
     {
         _ = request ?? throw new ArgumentNullException(nameof(request));
 
-        logger.LogInformation($"Sending request {request.Method.Method} {request.RequestUri}");
+        var requestMethod = request.Method.Method;
+        var requestUri = request.RequestUri;
+        logger.LogInformation("Sending request {requestMethod} {requestUri}", requestMethod, requestUri);
+
         var response = await base.SendAsync(request, cancellationToken).ConfigureAwait(false);
-        logger.LogInformation($"Received response {response.StatusCode} {response.Content?.Headers?.ContentLength} bytes.");
+
+        var responseStatusCode = response.StatusCode;
+        var responseContentLength = response.Content?.Headers?.ContentLength;
+
+        if (responseContentLength is not null)
+        {
+            logger.LogInformation("Received response {responseStatusCode} {responseContentLength} bytes", responseStatusCode, responseContentLength);
+        }
+        else
+        {
+            logger.LogInformation("Received response {responseStatusCode}", responseStatusCode);
+        }
 
         return response;
     }
