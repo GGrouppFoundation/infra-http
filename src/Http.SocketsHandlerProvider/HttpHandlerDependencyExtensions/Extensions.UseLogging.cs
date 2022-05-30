@@ -7,17 +7,22 @@ namespace GGroupp.Infra;
 
 partial class HttpHandlerDependencyExtensions
 {
-    public static Dependency<LoggerDelegatingHandler> UseLogging<THandler>(
-        this Dependency<THandler> dependency, Func<IServiceProvider, ILogger> loggerResolver)
+    public static Dependency<HttpMessageHandler> UseLogging<THandler>(
+        this Dependency<THandler> sourceDependency, Func<IServiceProvider, ILogger> loggerResolver)
         where THandler : HttpMessageHandler
-        =>
-        InnerUseLogging(
-            dependency ?? throw new ArgumentNullException(nameof(dependency)),
-            loggerResolver ?? throw new ArgumentNullException(nameof(loggerResolver)));
+    {
+        _ = sourceDependency ?? throw new ArgumentNullException(nameof(sourceDependency));
+        _ = loggerResolver ?? throw new ArgumentNullException(nameof(loggerResolver));
 
-    private static Dependency<LoggerDelegatingHandler> InnerUseLogging<THandler>(
-        Dependency<THandler> dependency, Func<IServiceProvider, ILogger> loggerResolver)
+        return sourceDependency.With(loggerResolver).Fold<HttpMessageHandler>(LoggerDelegatingHandler.Create);
+    }
+
+    public static Dependency<HttpMessageHandler> UseLogging<THandler>(
+        this Dependency<THandler, ILogger> sourceDependency)
         where THandler : HttpMessageHandler
-        =>
-        dependency.With(loggerResolver).Fold(LoggerDelegatingHandler.Create);
+    {
+        _ = sourceDependency ?? throw new ArgumentNullException(nameof(sourceDependency));
+
+        return sourceDependency.Fold<HttpMessageHandler>(LoggerDelegatingHandler.Create);
+    }
 }
