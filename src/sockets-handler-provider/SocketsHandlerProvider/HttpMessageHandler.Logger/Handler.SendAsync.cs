@@ -1,4 +1,4 @@
-using System;
+using System.Diagnostics;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
@@ -10,10 +10,11 @@ partial class LoggerDelegatingHandler
 {
     protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
     {
-        _ = request ?? throw new ArgumentNullException(nameof(request));
+        Debug.Assert(request is not null);
 
         var requestMethod = request.Method.Method;
         var requestUri = request.RequestUri;
+
         logger.LogInformation("Sending request {requestMethod} {requestUri}", requestMethod, requestUri);
 
         var response = await base.SendAsync(request, cancellationToken).ConfigureAwait(false);

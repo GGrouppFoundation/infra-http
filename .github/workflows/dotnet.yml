@@ -9,13 +9,12 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - name: Setup .NET
-      uses: actions/setup-dotnet@v1
+      uses: actions/setup-dotnet@v3
       with:
-        dotnet-version: 6.0.x
-        include-prerelease: true
-        
+        dotnet-version: '7.0.x'
+
      # Add NuGet Sources
 
     - name: Create Local NuGet Directory
@@ -25,32 +24,51 @@ jobs:
       run: dotnet nuget add source ~/nuget
 
     - name: Add GGroupp NuGet Source
-      run: dotnet nuget add source ${{ secrets.GG_NUGET_SOURCE_URL }} -n ggroupp -u ${{ secrets.GG_NUGET_SOURCE_USER_NAME }} -p ${{ secrets.GG_NUGET_SOURCE_USER_PASSWORD }} --store-password-in-clear-text
+      run: >
+        dotnet nuget add source ${{ secrets.GG_NUGET_SOURCE_URL }}
+        -n ggroupp -u ${{ secrets.GG_NUGET_SOURCE_USER_NAME }}
+        -p ${{ secrets.GG_NUGET_SOURCE_USER_PASSWORD }}
+        --store-password-in-clear-text
 
-    # Http.SocketsHandlerProvider.Abstractions
-    
-    - name: Restore Http.SocketsHandlerProvider.Abstractions
-      run: dotnet restore ./src/*/Http.SocketsHandlerProvider.Abstractions.csproj
+    # SocketsHandlerProvider.Abstractions
 
-    - name: Build Http.SocketsHandlerProvider.Abstractions
-      run: dotnet build ./src/*/Http.SocketsHandlerProvider.Abstractions.csproj --no-restore  -c Release
+    - name: Restore SocketsHandlerProvider.Abstractions
+      run: dotnet restore ./src/*/*/SocketsHandlerProvider.Abstractions.csproj
 
-    - name: Pack Http.SocketsHandlerProvider.Abstractions
-      run: dotnet pack ./src/*/Http.SocketsHandlerProvider.Abstractions.csproj --no-restore -o ~/nuget  -c Release
-      
-    # Http.SocketsHandlerProvider
+    - name: Build SocketsHandlerProvider.Abstractions
+      run: dotnet build ./src/*/*/SocketsHandlerProvider.Abstractions.csproj --no-restore  -c Release
 
-    - name: Restore Http.SocketsHandlerProvider
-      run: dotnet restore ./src/*/Http.SocketsHandlerProvider.csproj
+    - name: Pack SocketsHandlerProvider.Abstractions
+      run: dotnet pack ./src/*/*/SocketsHandlerProvider.Abstractions.csproj --no-restore -o ~/nuget  -c Release
 
-    - name: Build Http.SocketsHandlerProvider
-      run: dotnet build ./src/*/Http.SocketsHandlerProvider.csproj --no-restore  -c Release
+    # SocketsHandlerProvider
 
-    - name: Pack Http.SocketsHandlerProvider
-      run: dotnet pack ./src/*/Http.SocketsHandlerProvider.csproj --no-restore -o ~/nuget  -c Release
-      
+    - name: Restore SocketsHandlerProvider
+      run: dotnet restore ./src/*/*/SocketsHandlerProvider.csproj
+
+    - name: Build SocketsHandlerProvider
+      run: dotnet build ./src/*/*/SocketsHandlerProvider.csproj --no-restore  -c Release
+
+    - name: Pack SocketsHandlerProvider
+      run: dotnet pack ./src/*/*/SocketsHandlerProvider.csproj --no-restore -o ~/nuget  -c Release
+
+    # Polly
+
+    - name: Restore Polly
+      run: dotnet restore ./src/*/*/Polly.csproj
+
+    - name: Build Polly
+      run: dotnet build ./src/*/*/Polly.csproj --no-restore  -c Release
+
+    - name: Pack Polly
+      run: dotnet pack ./src/*/*/Polly.csproj --no-restore -o ~/nuget  -c Release
+
     # Push
-      
+
     - name: Push Packages
       if: ${{ github.ref == 'refs/heads/main' }}
-      run: dotnet nuget push "../../../nuget/*.nupkg" -s ${{ secrets.GG_NUGET_SOURCE_URL }} -k ${{ secrets.GG_NUGET_SOURCE_USER_PASSWORD }} --skip-duplicate
+      run: >
+        dotnet nuget push "../../../nuget/*.nupkg"
+        -s ${{ secrets.GG_NUGET_SOURCE_URL }}
+        -k ${{ secrets.GG_NUGET_SOURCE_USER_PASSWORD }}
+        --skip-duplicate
