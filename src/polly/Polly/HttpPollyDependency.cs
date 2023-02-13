@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using Polly;
+using Polly.Contrib.WaitAndRetry;
 using Polly.Extensions.Http;
 using PrimeFuncPack;
 
@@ -12,14 +13,14 @@ namespace GGroupp.Infra;
 
 public static class HttpPollyDependency
 {
-    private const int StandardRetryCount = 5;
+    private static readonly TimeSpan StandardMedianFirstRetryDelay = TimeSpan.FromSeconds(1);
 
     public static Dependency<HttpMessageHandler> UsePollyStandard(
         this Dependency<HttpMessageHandler> dependency, params HttpStatusCode[] statusCodes)
     {
         ArgumentNullException.ThrowIfNull(dependency);
 
-        var retryPolicy = GetStandardRetryPolicy(StandardRetryCount, statusCodes);
+        var retryPolicy = GetStandardRetryPolicy(statusCodes);
         return dependency.Map<HttpMessageHandler>(CreateHandler);
 
         PollyDelegatingHandler CreateHandler(HttpMessageHandler innerHandler)
@@ -88,7 +89,7 @@ public static class HttpPollyDependency
         return new(innerHandler, retryPolicy);
     }
 
-    private static IAsyncPolicy<HttpResponseMessage> GetStandardRetryPolicy(int retryCount, [AllowNull] HttpStatusCode[] statusCodes)
+    private static IAsyncPolicy<HttpResponseMessage> GetStandardRetryPolicy([AllowNull] HttpStatusCode[] statusCodes)
     {
         var builder = HttpPolicyExtensions.HandleTransientHttpError();
 
@@ -97,14 +98,11 @@ public static class HttpPollyDependency
             builder = builder.OrResult(IsStatusCodeRetried);
         }
 
-        return builder.WaitAndRetryAsync(retryCount, GetSleepDuration);
+        var backOffDelay = Backoff.DecorrelatedJitterBackoffV2(StandardMedianFirstRetryDelay, int.MaxValue);
+        return builder.WaitAndRetryAsync(backOffDelay);
 
         bool IsStatusCodeRetried(HttpResponseMessage response)
             =>
             statusCodes.Contains(response.StatusCode);
-
-        static TimeSpan GetSleepDuration(int retryAttempt)
-            =>
-            TimeSpan.FromSeconds(Math.Pow(2, retryAttempt));
     }
 }
