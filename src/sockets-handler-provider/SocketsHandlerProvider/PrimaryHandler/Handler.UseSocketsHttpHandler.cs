@@ -2,7 +2,7 @@ using System;
 using System.Net.Http;
 using PrimeFuncPack;
 
-namespace GGroupp.Infra;
+namespace GarageGroup.Infra;
 
 partial class PrimaryHandler
 {

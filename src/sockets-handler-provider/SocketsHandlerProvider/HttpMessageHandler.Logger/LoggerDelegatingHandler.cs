@@ -2,7 +2,7 @@ using System;
 using System.Net.Http;
 using Microsoft.Extensions.Logging;
 
-namespace GGroupp.Infra;
+namespace GarageGroup.Infra;
 
 public sealed partial class LoggerDelegatingHandler : DelegatingHandler
 {

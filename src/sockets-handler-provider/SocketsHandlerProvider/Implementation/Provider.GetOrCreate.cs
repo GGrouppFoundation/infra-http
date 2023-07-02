@@ -2,7 +2,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Net.Http;
 
-namespace GGroupp.Infra;
+namespace GarageGroup.Infra;
 
 partial class DefaultSocketsHttpHandlerProvider
 {

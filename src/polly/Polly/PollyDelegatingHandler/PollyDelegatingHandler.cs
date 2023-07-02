@@ -1,7 +1,7 @@
 using System.Net.Http;
 using Polly;
 
-namespace GGroupp.Infra;
+namespace GarageGroup.Infra;
 
 internal sealed partial class PollyDelegatingHandler : DelegatingHandler
 {

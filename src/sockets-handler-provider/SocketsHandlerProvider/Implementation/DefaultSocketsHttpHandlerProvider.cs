@@ -2,7 +2,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Net.Http;
 
-namespace GGroupp.Infra;
+namespace GarageGroup.Infra;
 
 internal sealed partial class DefaultSocketsHttpHandlerProvider : ISocketsHttpHandlerProvider, IDisposable
 {

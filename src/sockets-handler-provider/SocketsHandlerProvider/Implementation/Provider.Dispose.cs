@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 
-namespace GGroupp.Infra;
+namespace GarageGroup.Infra;
 
 partial class DefaultSocketsHttpHandlerProvider
 {
