@@ -1,7 +1,7 @@
 using System;
 using System.Net.Http;
 
-namespace GGroupp.Infra;
+namespace GarageGroup.Infra;
 
 public interface ISocketsHttpHandlerProvider
 {

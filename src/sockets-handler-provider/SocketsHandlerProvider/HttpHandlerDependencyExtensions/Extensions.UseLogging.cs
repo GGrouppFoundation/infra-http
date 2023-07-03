@@ -4,7 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using PrimeFuncPack;
 
-namespace GGroupp.Infra;
+namespace GarageGroup.Infra;
 
 partial class HttpHandlerDependencyExtensions
 {
@@ -12,7 +12,7 @@ partial class HttpHandlerDependencyExtensions
         this Dependency<THandler> sourceDependency, string logCategoryName)
         where THandler : HttpMessageHandler
     {
-        _ = sourceDependency ?? throw new ArgumentNullException(nameof(sourceDependency));
+        ArgumentNullException.ThrowIfNull(sourceDependency);
 
         return sourceDependency.With(ResolveLogger).Fold<HttpMessageHandler>(LoggerDelegatingHandler.Create);
 
@@ -25,8 +25,8 @@ partial class HttpHandlerDependencyExtensions
         this Dependency<THandler> sourceDependency, Func<IServiceProvider, ILogger> loggerResolver)
         where THandler : HttpMessageHandler
     {
-        _ = sourceDependency ?? throw new ArgumentNullException(nameof(sourceDependency));
-        _ = loggerResolver ?? throw new ArgumentNullException(nameof(loggerResolver));
+        ArgumentNullException.ThrowIfNull(sourceDependency);
+        ArgumentNullException.ThrowIfNull(loggerResolver);
 
         return sourceDependency.With(loggerResolver).Fold<HttpMessageHandler>(LoggerDelegatingHandler.Create);
     }
@@ -35,7 +35,7 @@ partial class HttpHandlerDependencyExtensions
         this Dependency<THandler, ILogger> sourceDependency)
         where THandler : HttpMessageHandler
     {
-        _ = sourceDependency ?? throw new ArgumentNullException(nameof(sourceDependency));
+        ArgumentNullException.ThrowIfNull(sourceDependency);
 
         return sourceDependency.Fold<HttpMessageHandler>(LoggerDelegatingHandler.Create);
     }

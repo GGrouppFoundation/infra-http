@@ -4,7 +4,7 @@ using System.Threading;
 using Microsoft.Extensions.DependencyInjection;
 using PrimeFuncPack;
 
-namespace GGroupp.Infra;
+namespace GarageGroup.Infra;
 
 public static partial class PrimaryHandler
 {

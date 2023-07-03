@@ -6,12 +6,13 @@ namespace Microsoft.Extensions.Hosting;
 public static class SocketsHttpHandlerProviderHostBuilderExtensions
 {
     public static IHostBuilder ConfigureSocketsHttpHandlerProvider(this IHostBuilder hostBuilder)
-        =>
-        InnerConfigureSocketsHttpHandlerProvider(
-            hostBuilder ?? throw new ArgumentNullException(nameof(hostBuilder)));
+    {
+        ArgumentNullException.ThrowIfNull(hostBuilder);
 
-    private static IHostBuilder InnerConfigureSocketsHttpHandlerProvider(IHostBuilder hostBuilder)
-        =>
-        hostBuilder.ConfigureServices(
-            services => services.InternalAddSocketsHttpHandlerProviderAsSingleton());
+        return hostBuilder.ConfigureServices(ConfigureSocketsHttpHandlerProvider);
+
+        static void ConfigureSocketsHttpHandlerProvider(IServiceCollection services)
+            =>
+            services.InternalAddSocketsHttpHandlerProviderAsSingleton();
+    }
 }

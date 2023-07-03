@@ -9,7 +9,7 @@ using Polly.Contrib.WaitAndRetry;
 using Polly.Extensions.Http;
 using PrimeFuncPack;
 
-namespace GGroupp.Infra;
+namespace GarageGroup.Infra;
 
 public static class HttpPollyDependency
 {

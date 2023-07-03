@@ -6,14 +6,14 @@
     <Nullable>enable</Nullable>
     <InvariantGlobalization>true</InvariantGlobalization>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <RootNamespace>GGroupp.Infra</RootNamespace>
-    <AssemblyName>GGroupp.Infra.Http.SocketsHandlerProvider</AssemblyName>
-    <Version>2.4.0</Version>
+    <RootNamespace>GarageGroup.Infra</RootNamespace>
+    <AssemblyName>GarageGroup.Infra.Http.SocketsHandlerProvider</AssemblyName>
+    <Version>2.4.1</Version>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="GGroupp.Infra.Http.SocketsHandlerProvider.Abstractions" Version="2.0.2" />
-    <PackageReference Include="Microsoft.Extensions.Hosting" Version="7.0.0" />
+    <PackageReference Include="GarageGroup.Infra.Http.SocketsHandlerProvider.Abstractions" Version="2.0.2" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="7.0.1" />
     <PackageReference Include="PrimeFuncPack.Dependency.Core" Version="2.0.2" />
   </ItemGroup>
 
