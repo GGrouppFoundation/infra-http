@@ -10,9 +10,9 @@ partial class PollyDelegatingHandler
     protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
     {
         Debug.Assert(request is not null);
-        return retryPolicy.ExecuteAsync(InvokeAsync);
+        return retryPolicy.ExecuteAsync(InvokeAsync, cancellationToken);
 
-        Task<HttpResponseMessage> InvokeAsync()
+        Task<HttpResponseMessage> InvokeAsync(CancellationToken cancellationToken)
             =>
             cancellationToken.IsCancellationRequested switch
             {

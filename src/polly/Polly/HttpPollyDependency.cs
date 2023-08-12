@@ -4,6 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Threading.Tasks;
 using Polly;
 using Polly.Contrib.WaitAndRetry;
 using Polly.Extensions.Http;
@@ -20,7 +21,10 @@ public static class HttpPollyDependency
     {
         ArgumentNullException.ThrowIfNull(dependency);
 
-        var retryPolicy = GetStandardRetryPolicy(statusCodes);
+        var retryPolicy = Policy.WrapAsync(
+            GetTransientRetryPolicy(statusCodes),
+            GetTooManyRequestsRetryPolicy());
+
         return dependency.Map<HttpMessageHandler>(CreateHandler);
 
         PollyDelegatingHandler CreateHandler(HttpMessageHandler innerHandler)
@@ -89,7 +93,7 @@ public static class HttpPollyDependency
         return new(innerHandler, retryPolicy);
     }
 
-    private static IAsyncPolicy<HttpResponseMessage> GetStandardRetryPolicy([AllowNull] HttpStatusCode[] statusCodes)
+    private static IAsyncPolicy<HttpResponseMessage> GetTransientRetryPolicy([AllowNull] HttpStatusCode[] statusCodes)
     {
         var builder = HttpPolicyExtensions.HandleTransientHttpError();
 
@@ -105,4 +109,13 @@ public static class HttpPollyDependency
             =>
             statusCodes.Contains(response.StatusCode);
     }
+
+    private static IAsyncPolicy<HttpResponseMessage> GetTooManyRequestsRetryPolicy()
+        =>
+        Policy.HandleResult<HttpResponseMessage>(
+            static r => r.StatusCode is HttpStatusCode.TooManyRequests && r.Headers.RetryAfter is not null)
+        .WaitAndRetryAsync(
+            int.MaxValue,
+            static (_, result, _) => result.Result.Headers.RetryAfter?.Delta ?? TimeSpan.FromSeconds(15),
+            static (_, _, _, _) => Task.CompletedTask);
 }
