@@ -14,46 +14,46 @@ partial class InMemoryCacheHttpHandler
     {
         Debug.Assert(request is not null);
 
+        if (request.Method != HttpMethod.Get && request.Method != HttpMethod.Head)
+        {
+            return base.SendAsync(request, cancellationToken);
+        }
+
         if (option.ExpirationPerHttpResponseCode?.Count is not > 0)
         {
             return base.SendAsync(request, cancellationToken);
         }
 
-        return InnerSendAsync(request, cancellationToken);
+        return InnerSendWithCacheAsync(request, cancellationToken);
     }
 
-    private async Task<HttpResponseMessage> InnerSendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+    private async Task<HttpResponseMessage> InnerSendWithCacheAsync(HttpRequestMessage request, CancellationToken cancellationToken)
     {
         var requestMethod = request.Method;
         var requestUri = request.RequestUri;
 
         var key = CacheKeysProvider.GetKey(request);
-        if (requestMethod == HttpMethod.Get || requestMethod == HttpMethod.Head)
+        var cacheData = TryGetCacheData(key);
+
+        if (cacheData is not null)
         {
-            var cacheData = TryGetCacheData(key);
-            if (cacheData is not null)
-            {
-                logger?.LogInformation("Cached response for {requestMethod} {requestUri}", requestMethod.Method, requestUri);
-                return request.PrepareCachedEntry(cacheData);
-            }
+            logger?.LogInformation("Cached response for {requestMethod} {requestUri}", requestMethod.Method, requestUri);
+            return request.PrepareCachedEntry(cacheData);
         }
 
         var response = await base.SendAsync(request, cancellationToken).ConfigureAwait(false);
 
-        if (requestMethod == HttpMethod.Get || requestMethod == HttpMethod.Head)
+        var absoluteExpirationRelativeToNow = response.StatusCode.GetAbsoluteExpirationRelativeToNow(option.ExpirationPerHttpResponseCode);
+        if (absoluteExpirationRelativeToNow != TimeSpan.Zero)
         {
-            var absoluteExpirationRelativeToNow = response.StatusCode.GetAbsoluteExpirationRelativeToNow(option.ExpirationPerHttpResponseCode);
-            if (absoluteExpirationRelativeToNow != TimeSpan.Zero)
-            {
-                var entry = await response.ToCacheEntry();
-                TrySetCacheData(key, entry, absoluteExpirationRelativeToNow);
-
-                logger?.LogInformation("Cache response for {timeSpan}", absoluteExpirationRelativeToNow);
-                return request.PrepareCachedEntry(entry);
-            }
+            return response;
         }
 
-        return response;
+        var entry = await response.ToCacheEntry();
+        TrySetCacheData(key, entry, absoluteExpirationRelativeToNow);
+
+        logger?.LogInformation("Cache response for {timeSpan}", absoluteExpirationRelativeToNow);
+        return request.PrepareCachedEntry(entry);
     }
 
     private static CacheData? TryGetCacheData(string key)
