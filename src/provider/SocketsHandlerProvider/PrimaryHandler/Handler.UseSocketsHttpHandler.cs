@@ -21,5 +21,5 @@ partial class PrimaryHandler
     public static Dependency<SocketsHttpHandler> UseStandardSocketsHttpHandler()
         =>
         InnerUseSocketsHttpHandler(
-            sp => sp.GetSocketsHttpHandlerConfigurationFromEnvironment(string.Empty));
+            static sp => sp.GetSocketsHttpHandlerConfigurationFromEnvironment(string.Empty));
 }
