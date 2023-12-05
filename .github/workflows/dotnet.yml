@@ -66,6 +66,17 @@ jobs:
     - name: Pack Polly
       run: dotnet pack ./src/*/*/Polly.csproj --no-restore -o ~/nuget  -c Release
 
+    # Cache
+
+    - name: Restore Cache
+      run: dotnet restore ./src/*/*/Cache.csproj
+
+    - name: Build Cache
+      run: dotnet build ./src/*/*/Cache.csproj --no-restore  -c Release
+
+    - name: Pack Cache
+      run: dotnet pack ./src/*/*/Cache.csproj --no-restore -o ~/nuget  -c Release
+
     # Push
 
     - name: Push Packages
