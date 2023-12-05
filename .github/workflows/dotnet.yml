@@ -25,7 +25,7 @@ jobs:
     - name: Add Local Nuget Source
       run: dotnet nuget add source ~/nuget
 
-    - name: Add GGroupp NuGet Source
+    - name: Add Garage Group NuGet Source
       run: >
         dotnet nuget add source ${{ vars.GG_NUGET_SOURCE_URL }}
         -n garage
