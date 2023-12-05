@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
-using Microsoft.Extensions.Caching.InMemory;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using PrimeFuncPack;
 
 namespace GarageGroup.Infra;
@@ -19,14 +19,12 @@ public static class HttpCacheDependency
         ArgumentNullException.ThrowIfNull(dependency);
         ArgumentNullException.ThrowIfNull(optionResolver);
 
-        return dependency.With(optionResolver).Fold<HttpMessageHandler>(CreateInMemoryCacheHandler);
+        return dependency.Map<HttpMessageHandler>(ResolveInMemoryCacheHandler);
 
-        static InMemoryCacheHandler CreateInMemoryCacheHandler(HttpMessageHandler innerHandler, HttpCacheOption option)
+        InMemoryCacheHttpHandler ResolveInMemoryCacheHandler(IServiceProvider serviceProvider, HttpMessageHandler innerHandler)
         {
             ArgumentNullException.ThrowIfNull(innerHandler);
-            ArgumentNullException.ThrowIfNull(option);
-
-            return InnerCreateInMemoryCacheHandler(innerHandler, option);
+            return new(innerHandler, optionResolver.Invoke(serviceProvider), serviceProvider.GetLoggerFactory());
         }
     }
 
@@ -38,13 +36,13 @@ public static class HttpCacheDependency
 
         return dependency.Map<HttpMessageHandler>(ResolveHandler);
 
-        InMemoryCacheHandler ResolveHandler(IServiceProvider serviceProvider, HttpMessageHandler innerHandler)
+        InMemoryCacheHttpHandler ResolveHandler(IServiceProvider serviceProvider, HttpMessageHandler innerHandler)
         {
             ArgumentNullException.ThrowIfNull(serviceProvider);
             ArgumentNullException.ThrowIfNull(innerHandler);
 
             var configuration = serviceProvider.GetServiceOrThrow<IConfiguration>().GetSection(cacheSectionName ?? string.Empty);
-            return InnerCreateInMemoryCacheHandler(innerHandler, configuration.GetHttpCacheOption());
+            return new(innerHandler, configuration.GetHttpCacheOption(), serviceProvider.GetLoggerFactory());
         }
     }
 
@@ -65,11 +63,13 @@ public static class HttpCacheDependency
             expirationPerHttpResponseCode[statusCode] = TimeSpan.Parse(value);
         }
 
-        return new(
-            expirationPerHttpResponseCode: new(expirationPerHttpResponseCode));
+        return new()
+        {
+            ExpirationPerHttpResponseCode = new(expirationPerHttpResponseCode)
+        };
     }
 
-    private static InMemoryCacheHandler InnerCreateInMemoryCacheHandler(HttpMessageHandler innerHandler, HttpCacheOption option)
+    private static ILoggerFactory? GetLoggerFactory(this IServiceProvider serviceProvider)
         =>
-        new(innerHandler, option.ExpirationPerHttpResponseCode);
+        (ILoggerFactory?)serviceProvider.GetService(typeof(ILoggerFactory));
 }
