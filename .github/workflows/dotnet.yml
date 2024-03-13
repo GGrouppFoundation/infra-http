@@ -77,6 +77,17 @@ jobs:
     - name: Pack Cache
       run: dotnet pack ./src/*/*/Cache.csproj --no-restore -o ~/nuget  -c Release
 
+    # Header
+
+    - name: Restore Header
+      run: dotnet restore ./src/*/*/Header.csproj
+
+    - name: Build Header
+      run: dotnet build ./src/*/*/Header.csproj --no-restore  -c Release
+
+    - name: Pack Header
+      run: dotnet pack ./src/*/*/Header.csproj --no-restore -o ~/nuget  -c Release
+
     # Push
 
     - name: Push Packages
