@@ -9,7 +9,7 @@
     <NoWarn>$(NoWarn);IDE0130;CA1859</NoWarn>
     <RootNamespace>GarageGroup.Infra</RootNamespace>
     <AssemblyName>GarageGroup.Infra.Http.SocketsHandlerProvider.Abstractions</AssemblyName>
-    <Version>3.0.1-build.1</Version>
+    <Version>3.0.1</Version>
   </PropertyGroup>
 
 </Project>

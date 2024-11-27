@@ -9,11 +9,11 @@
     <NoWarn>$(NoWarn);IDE0130;CA1859</NoWarn>
     <RootNamespace>GarageGroup.Infra</RootNamespace>
     <AssemblyName>GarageGroup.Infra.Http.SocketsHandlerProvider</AssemblyName>
-    <Version>3.1.0-build.1</Version>
+    <Version>3.1.0</Version>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="GarageGroup.Infra.Http.SocketsHandlerProvider.Abstractions" Version="3.0.1-build.1" />
+    <PackageReference Include="GarageGroup.Infra.Http.SocketsHandlerProvider.Abstractions" Version="3.0.1" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.0" />
     <PackageReference Include="PrimeFuncPack.Dependency.Core" Version="2.1.0" />
   </ItemGroup>
