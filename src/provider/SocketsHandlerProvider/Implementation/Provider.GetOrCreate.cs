@@ -10,17 +10,14 @@ partial class DefaultSocketsHttpHandlerProvider
     {
         return disposed
             ? throw new ObjectDisposedException($"{nameof(DefaultSocketsHttpHandlerProvider)} was disposed.")
-            : InnerGetOrCreate(name ?? string.Empty, configure);
-    }
+            : namedHandlers.GetOrAdd(name ?? string.Empty, CreateHandler);
 
-    private SocketsHttpHandler InnerGetOrCreate(string name, Action<SocketsHttpHandler>? configure)
-        =>
-        namedHandlers.GetOrAdd(
-            name,
-            _ =>
-            {
-                var handler = new SocketsHttpHandler();
-                configure?.Invoke(handler);
-                return handler;
-            });
+        SocketsHttpHandler CreateHandler(string _)
+        {
+            var handler = new SocketsHttpHandler();
+            configure?.Invoke(handler);
+
+            return handler;
+        }
+    }
 }

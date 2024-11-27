@@ -15,7 +15,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SocketsHandlerProvider.Abst
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cache", "src\handler\Cache\Cache.csproj", "{CDB1ADA8-75C7-4862-9E34-5CEA847EBAE4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Header", "src\handler\Header\Header.csproj", "{FC276BC8-9144-433B-BA43-663F136DE054}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Configurator", "src\handler\Configurator\Configurator.csproj", "{FC276BC8-9144-433B-BA43-663F136DE054}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

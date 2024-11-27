@@ -6,7 +6,9 @@ namespace GarageGroup.Infra;
 
 internal sealed partial class DefaultSocketsHttpHandlerProvider : ISocketsHttpHandlerProvider, IDisposable
 {
-    private readonly ConcurrentDictionary<string, SocketsHttpHandler> namedHandlers = new();
+    private readonly ConcurrentDictionary<string, SocketsHttpHandler> namedHandlers
+        =
+        new();
 
     private bool disposed;
 }
