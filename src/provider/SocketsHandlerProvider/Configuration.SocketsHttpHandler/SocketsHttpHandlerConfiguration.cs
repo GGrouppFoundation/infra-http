@@ -12,5 +12,7 @@ public sealed record SocketsHttpHandlerConfiguration : ISocketsHttpHandlerConfig
 
     public int? MaxConnectionsPerServer { get; set; }
 
-    string ISocketsHttpHandlerConfiguration.Name => Name ?? string.Empty;
+    string ISocketsHttpHandlerConfiguration.Name
+        =>
+        Name ?? string.Empty;
 }

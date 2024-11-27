@@ -15,6 +15,7 @@ partial class DefaultSocketsHttpHandlerProvider
         {
             handler.Dispose();
         }
+
         disposed = true;
     }
 }

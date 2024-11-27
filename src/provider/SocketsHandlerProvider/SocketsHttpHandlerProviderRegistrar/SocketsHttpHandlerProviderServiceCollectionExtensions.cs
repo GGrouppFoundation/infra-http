@@ -6,9 +6,10 @@ namespace Microsoft.Extensions.DependencyInjection;
 public static class SocketsHttpHandlerProviderServiceCollectionExtensions
 {
     public static IServiceCollection AddSocketsHttpHandlerProviderAsSingleton(this IServiceCollection services)
-        =>
-        InternalAddSocketsHttpHandlerProviderAsSingleton(
-            services ?? throw new ArgumentNullException(nameof(services)));
+    {
+        ArgumentNullException.ThrowIfNull(services);
+        return InternalAddSocketsHttpHandlerProviderAsSingleton(services);
+    }
 
     internal static IServiceCollection InternalAddSocketsHttpHandlerProviderAsSingleton(this IServiceCollection services)
         =>
