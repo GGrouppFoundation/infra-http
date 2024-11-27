@@ -10,7 +10,7 @@ partial class DefaultSocketsHttpHandlerProvider
     {
         return disposed
             ? throw new ObjectDisposedException($"{nameof(DefaultSocketsHttpHandlerProvider)} was disposed.")
-            : namedHandlers.GetOrAdd(name ?? string.Empty,CreateHandler);
+            : namedHandlers.GetOrAdd(name ?? string.Empty, CreateHandler);
 
         SocketsHttpHandler CreateHandler(string _)
         {
