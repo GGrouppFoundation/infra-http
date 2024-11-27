@@ -8,8 +8,8 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <NoWarn>$(NoWarn);IDE0130;CA1859</NoWarn>
     <RootNamespace>GarageGroup.Infra</RootNamespace>
-    <AssemblyName>GarageGroup.Infra.Http.Header</AssemblyName>
-    <Version>0.1.0-build.1</Version>
+    <AssemblyName>GarageGroup.Infra.Http.Configurator</AssemblyName>
+    <Version>0.0.1-build.1</Version>
   </PropertyGroup>
 
   <ItemGroup>

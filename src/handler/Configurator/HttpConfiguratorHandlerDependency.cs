@@ -6,7 +6,7 @@ using PrimeFuncPack;
 
 namespace GarageGroup.Infra;
 
-public static class HttpHeaderHandlerDependency
+public static class HttpConfiguratorHandlerDependency
 {
     public static Dependency<HttpMessageHandler> ConfigureHttpHeader(
         this Dependency<HttpMessageHandler> dependency, [DisallowNull] string headerName, string configurationKey)
@@ -28,7 +28,27 @@ public static class HttpHeaderHandlerDependency
         }
     }
 
+    public static Dependency<HttpMessageHandler> ConfigureQueryParameter(
+        this Dependency<HttpMessageHandler> dependency, [DisallowNull] string parameterName, string configurationKey)
+    {
+        ArgumentNullException.ThrowIfNull(dependency);
+        ArgumentException.ThrowIfNullOrWhiteSpace(parameterName);
+
+        return dependency.Map<HttpMessageHandler>(CreateHandler);
+
+        InternalQueryParameterHandler CreateHandler(IServiceProvider serviceProvider, HttpMessageHandler innerHandler)
+        {
+            ArgumentNullException.ThrowIfNull(serviceProvider);
+            ArgumentNullException.ThrowIfNull(innerHandler);
+
+            return new(
+                innerHandler: innerHandler,
+                parameterName: parameterName,
+                parameterValue: serviceProvider.GetServiceOrThrow<IConfiguration>()[configurationKey.OrEmpty()].OrEmpty());
+        }
+    }
+
     private static string OrEmpty(this string? source)
         =>
-        string.IsNullOrEmpty(source) ? string.Empty : source;
+        source ?? string.Empty;
 }

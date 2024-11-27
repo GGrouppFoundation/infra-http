@@ -77,16 +77,16 @@ jobs:
     - name: Pack Cache
       run: dotnet pack ./src/*/*/Cache.csproj --no-restore -o ~/nuget  -c Release
 
-    # Header
+    # Configurator
 
-    - name: Restore Header
-      run: dotnet restore ./src/*/*/Header.csproj
+    - name: Restore Configurator
+      run: dotnet restore ./src/*/*/Configurator.csproj
 
-    - name: Build Header
-      run: dotnet build ./src/*/*/Header.csproj --no-restore  -c Release
+    - name: Build Configurator
+      run: dotnet build ./src/*/*/Configurator.csproj --no-restore  -c Release
 
-    - name: Pack Header
-      run: dotnet pack ./src/*/*/Header.csproj --no-restore -o ~/nuget  -c Release
+    - name: Pack Configurator
+      run: dotnet pack ./src/*/*/Configurator.csproj --no-restore -o ~/nuget  -c Release
 
     # Push
 
